@@ -34,8 +34,8 @@ public class Task {
     }
 
     public String toString() {
-        return "Task: " + this.taskDetails.get("title") + "\nDue date: " + this.taskDetails.get("dueDate")
-                + "\nProject: " + this.taskDetails.get("project");
+        return "Task: " + this.taskDetails.get("title") + ", due date: " + this.taskDetails.get("dueDate")
+                + ", project: " + this.taskDetails.get("project");
     }
 
 }
