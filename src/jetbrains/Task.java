@@ -1,32 +1,47 @@
 package jetbrains;
+import java.time.LocalDate;
 import java.util.HashMap;
 
 public class Task {
-    HashMap<String, String> taskDetails;
+    String title;
+    LocalDate dueDate;
+    String project;
     boolean isDone;
 
-    public Task(String title, String dueDate, String project) {
-        this.taskDetails = new HashMap<>();
-        this.taskDetails.put("title", title);
-        this.taskDetails.put("dueDate", dueDate);
-        this.taskDetails.put("project", project);
+    public Task(String title, LocalDate dueDate, String project) {
+        this.title = title;
+        this.dueDate = dueDate;
+        this.project = project;
         this.isDone = false;
     }
 
     public String getTitle() {
-        return this.taskDetails.get("title");
+        return this.title;
     }
 
-    public String getDueDate() {
-        return this.taskDetails.get("dueDate");
+    public LocalDate getDueDate() {
+        return this.dueDate;
     }
 
     public String getProject() {
-        return this.taskDetails.get("project");
+        return this.project;
     }
 
-    public void markDone() {
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setDueDate(LocalDate date) {
+        this.dueDate = date;
+    }
+
+    public void setProject(String project) {
+        this.project = project;
+    }
+
+    public boolean markDone() {
         this.isDone = true;
+        return this.isDone; //side effect? how to handle it in a different way?
     }
 
     public void formatDate() {
@@ -34,8 +49,8 @@ public class Task {
     }
 
     public String toString() {
-        return "Task: " + this.taskDetails.get("title") + ", due date: " + this.taskDetails.get("dueDate")
-                + ", project: " + this.taskDetails.get("project");
+        return "Task: " + this.title + ", due date: " + this.dueDate
+                + ", project: " + this.project;
     }
 
 }
