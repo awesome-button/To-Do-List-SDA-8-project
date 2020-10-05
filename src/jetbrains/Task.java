@@ -48,7 +48,7 @@ public class Task {
     }
 
     public String toString() {
-        return "Task: " + this.title + ", due date: " + this.dueDate
+        return this.title + ", due date: " + this.dueDate
                 + ", project: " + this.project;
     }
 
