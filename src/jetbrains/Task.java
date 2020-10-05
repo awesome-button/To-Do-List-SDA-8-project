@@ -1,11 +1,10 @@
 package jetbrains;
 import java.time.LocalDate;
-import java.util.HashMap;
+import java.util.Comparator;
 
 public class Task {
-    String title;
+    String title, project;
     LocalDate dueDate;
-    String project;
     boolean isDone;
 
     public Task(String title, LocalDate dueDate, String project) {

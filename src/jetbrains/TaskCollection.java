@@ -1,8 +1,10 @@
 package jetbrains;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
-    public class TaskCollection {
+public class TaskCollection {
         ArrayList<Task> tasks;
 
         public TaskCollection() {
@@ -31,6 +33,15 @@ import java.util.ArrayList;
 
             return list;
         }
+
+        public void sortByName() {
+            Collections.sort(tasks, new SorterByName());
+        }
+
+        public void sortByDate() {
+            Collections.sort(tasks, new SorterByDate());
+        }
+
 
 
 

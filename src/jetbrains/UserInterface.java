@@ -16,10 +16,10 @@ import java.util.Scanner;
         printWelcome();
 
         //inout for testing
-        this.collection.addTask(new Task("buy a guide", LocalDate.parse("2020-10-30"), "travel"));
+        this.collection.addTask(new Task("buy a guide", LocalDate.parse("2020-10-01"), "travel"));
         this.collection.addTask(new Task("book train tickets", LocalDate.parse("2020-10-30"), "travel"));
-        this.collection.addTask(new Task("make a route", LocalDate.parse("2020-10-30"), "travel"));
-        this.collection.addTask(new Task("get some advice from Aline", LocalDate.parse("2020-10-30"), "travel"));
+        this.collection.addTask(new Task("make a route", LocalDate.parse("2020-10-05"), "travel"));
+        this.collection.addTask(new Task("get some advice from Aline", LocalDate.parse("2020-10-09"), "travel"));
 
         while (true) {
             printCommands();
@@ -29,6 +29,7 @@ import java.util.Scanner;
 
             switch (command) {
                 case 1:
+                    sortTasks();
                     printTasks();
                     break;
                 case 2:
@@ -116,5 +117,18 @@ import java.util.Scanner;
         }
     }
 
+    public void sortTasks() {
+        System.out.println("Sort by task name(1) or due date(2)?");
 
+        int answer = Integer.valueOf(scanner.nextLine());
+
+        switch (answer) {
+            case 1:
+                collection.sortByName();
+                break;
+            case 2:
+                collection.sortByDate();
+                break;
+        }
+    }
 }
