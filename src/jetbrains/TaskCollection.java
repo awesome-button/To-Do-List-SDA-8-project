@@ -23,12 +23,12 @@ public class TaskCollection {
             return this.tasks.remove(task);
         }
 
-        public String listTasks() {
+        public String getTasks() {
             String list = "";
 
             for (int i = 0; i < this.tasks.size(); i++) {
                 Task currentTask = this.tasks.get(i);
-                list += String.valueOf(i+1) + ": " + currentTask.getTitle() + ", due on " + currentTask.getDueDate() + "\n";
+                list += (i+1) + ": " + currentTask.toString() + "\n";
             }
 
             return list;
