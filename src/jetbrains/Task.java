@@ -38,6 +38,7 @@ public class Task {
         this.project = project;
     }
 
+    //the task should also be automatically removed from the list
     public boolean markDone() {
         this.isDone = true;
         return this.isDone; //side effect? how to handle it in a different way?
@@ -48,7 +49,7 @@ public class Task {
     }
 
     public String toString() {
-        return "Task: " + this.title + ", due date: " + this.dueDate
+        return this.title + ", due date: " + this.dueDate
                 + ", project: " + this.project;
     }
 

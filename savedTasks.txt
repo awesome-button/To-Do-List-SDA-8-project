@@ -1,0 +1,6 @@
+1: learn Gradle, due date: 2020-10-28, project: programming
+2: book train tickets, due date: 2020-10-30, project: travel
+3: buy a guide, due date: 2020-10-01, project: travel
+4: get some advice from Aline, due date: 2020-10-09, project: travel
+5: invite friends, due date: 2020-10-07, project: travel
+6: make a route, due date: 2020-10-05, project: travel
