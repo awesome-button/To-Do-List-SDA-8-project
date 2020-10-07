@@ -34,8 +34,8 @@ public class TaskCollection {
             return list;
         }
 
-        public void sortByName() {
-            Collections.sort(tasks, new SorterByName());
+        public void sortByProject() {
+            Collections.sort(tasks, new SorterByProject());
         }
 
         public void sortByDate() {

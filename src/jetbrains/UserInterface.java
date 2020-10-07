@@ -124,7 +124,7 @@ import java.util.Scanner;
 
         switch (answer) {
             case 1:
-                collection.sortByName();
+                collection.sortByProject();
                 break;
             case 2:
                 collection.sortByDate();
