@@ -7,16 +7,24 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
 public class UserInterface {
 
         TaskCollection collection;
         Scanner scanner;
 
+    /**
+     * Constructor method where a new collection of tasks and a scanner are initialized
+     */
     public UserInterface() {
         this.collection = new TaskCollection();
         this.scanner = new Scanner(System.in);
     }
 
+    /**
+     * Start the program by opening tasks saved from previous sessions, printing a welcome
+     * message and asking user to choose and enter a command.
+     */
     public void start() {
         openSavedTasks();
         printWelcome();
@@ -24,29 +32,48 @@ public class UserInterface {
         while (true) {
             printCommands();
             System.out.println("Enter command:");
-
             int command = Integer.valueOf(scanner.nextLine());
+            processCommand(command);
+        }
+    }
 
-            switch (command) {
-                case 1:
-                    sortTasks();
-                    printTasks();
-                    break;
-                case 2:
-                    createTask();
-                    printTasks();
-                    break;
-                case 3:
-                    editTask();
-                    break;
-                case 4:
-                    createFile();
-                    saveChanges();
-                    printByeMessage();
-                    return;
-            }
+    /**
+     * Accept input command from user and continue with execution based on the command
+     * @param command
+     */
+    public void processCommand(int command) {
+        switch (command) {
+            case 1:
+                sortTasks();
+                printTasks();
+                break;
+            case 2:
+                createTask();
+                printTasks();
+                break;
+            case 3:
+                editTask();
+                break;
+            case 4:
+                createFile();
+                saveChanges();
+                printByeMessage();
+                return;
+        }
+    }
 
+    public void sortTasks() {
+        System.out.println("Sort by task project(1) or due date(2)?");
 
+        int answer = Integer.valueOf(scanner.nextLine());
+
+        switch (answer) {
+            case 1:
+                collection.sortByProject();
+                break;
+            case 2:
+                collection.sortByDate();
+                break;
         }
     }
 
@@ -190,18 +217,5 @@ public class UserInterface {
         }
     }
 
-    public void sortTasks() {
-        System.out.println("Sort by task project(1) or due date(2)?");
 
-        int answer = Integer.valueOf(scanner.nextLine());
-
-        switch (answer) {
-            case 1:
-                collection.sortByProject();
-                break;
-            case 2:
-                collection.sortByDate();
-                break;
-        }
-    }
 }
