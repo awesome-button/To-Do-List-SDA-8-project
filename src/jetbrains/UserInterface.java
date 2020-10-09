@@ -28,12 +28,13 @@ public class UserInterface {
     public void start() {
         openSavedTasks();
         printWelcome();
+        boolean finished = false;
 
-        while (true) {
+        while (!finished) {
             printCommands();
             System.out.println("Enter command:");
             int command = Integer.valueOf(scanner.nextLine());
-            processCommand(command);
+            finished = processCommand(command);
         }
     }
 
@@ -41,7 +42,9 @@ public class UserInterface {
      * Accept input command from user and continue with execution based on the command
      * @param command
      */
-    public void processCommand(int command) {
+    public boolean processCommand(int command) {
+        boolean wantToQuit = false;
+
         switch (command) {
             case 1:
                 sortTasks();
@@ -58,8 +61,10 @@ public class UserInterface {
                 createFile();
                 saveChanges();
                 printByeMessage();
-                return;
+                wantToQuit = true;
+                break;
         }
+        return wantToQuit;
     }
 
     public void sortTasks() {
