@@ -23,6 +23,10 @@ public class TaskCollection {
             return this.tasks.remove(task);
         }
 
+        public boolean isEmpty() {
+            return this.tasks.isEmpty();
+        }
+
         public String getTasks() {
             String list = "";
 

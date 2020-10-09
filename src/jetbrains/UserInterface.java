@@ -18,13 +18,8 @@ public class UserInterface {
     }
 
     public void start() {
-        printWelcome();
         openSavedTasks();
-        //input for testing
-//        this.collection.addTask(new Task("buy a guide", LocalDate.parse("2020-10-01"), "travel"));
-//        this.collection.addTask(new Task("book train tickets", LocalDate.parse("2020-10-30"), "travel"));
-//        this.collection.addTask(new Task("make a route", LocalDate.parse("2020-10-05"), "travel"));
-//        this.collection.addTask(new Task("get some advice from Aline", LocalDate.parse("2020-10-09"), "travel"));
+        printWelcome();
 
         while (true) {
             printCommands();
@@ -113,7 +108,13 @@ public class UserInterface {
     }
 
     public void printWelcome() {
-        System.out.println("Welcome to \"Get It Done!\"\n");
+        if (this.collection.isEmpty()) {
+            System.out.println("Welcome to \"Get It Done!\"\n");
+        } else {
+            System.out.println("Welcome back to \"Get It Done!\"\n");
+            printTasks();
+        }
+
     }
 
     public void printByeMessage() {
@@ -123,14 +124,14 @@ public class UserInterface {
     public void printCommands() {
         System.out.println(
                 "Pick an option:\n" +
-                "(1) Show task list(by date or project)\n" +
+                "(1) Show task list(by project or date)\n" +
                 "(2) Add new task\n" +
                 "(3) Edit task(update, mark as done, remove)\n" +
                 "(4) Save and quit\n");
     }
 
     public void printTasks() {
-        System.out.println("The following tasks are now on your list:");
+        System.out.println("The following tasks are now on your list:\n");
         System.out.println(this.collection.getTasks());
     }
 
@@ -172,7 +173,8 @@ public class UserInterface {
 
         if (action == 2) {
             if (selectedTask.markDone()) {
-                System.out.println("The task (" + (taskIndex+1) + ") has been marked as done");
+                this.collection.removeTask(selectedTask);
+                System.out.println("The task (" + (taskIndex+1) + ") has been marked as done"); // add a confirmation option?
             } else {
                 System.out.println("Something went wrong. Try it again"); //repeating code, exception?
             }
