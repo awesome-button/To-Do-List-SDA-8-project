@@ -1,4 +1,5 @@
-package jetbrains;
+package main.java.toDoList;
+
 import java.time.LocalDate;
 import java.util.Scanner;
 
@@ -93,7 +94,6 @@ public class UserInterface {
     }
 
     public void editTask() {
-        //add a case for when there are no tasks on the list
 
         System.out.println("Which task would you like to edit?");
         System.out.println(this.collection.getTasks());
@@ -116,9 +116,9 @@ public class UserInterface {
         if (action == 2) {
             if (selectedTask.markDone()) {
                 this.collection.removeTask(selectedTask);
-                System.out.println("The task (" + (taskIndex+1) + ") has been marked as done"); // add a confirmation option?
+                System.out.println("The task (" + (taskIndex+1) + ") has been marked as done");
             } else {
-                System.out.println("Something went wrong. Try it again"); //repeating code, exception?
+                System.out.println("Something went wrong. Try it again");
             }
         }
 
@@ -127,7 +127,7 @@ public class UserInterface {
                 System.out.println("Task (" + (taskIndex + 1) + ") has been removed from your list\n");
                 System.out.println(this.collection.getTasks());
             } else {
-                System.out.println("Something went wrong. Try it again"); // repeating code, exception?
+                System.out.println("Something went wrong. Try it again");
             }
         }
     }

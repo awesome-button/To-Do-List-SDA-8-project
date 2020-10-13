@@ -1,6 +1,7 @@
-1: buy a guide, due date: 2020-10-01, project: travel
-2: make a route, due date: 2020-10-05, project: travel
-3: invite friends, due date: 2020-10-07, project: travel
-4: get some advice from Aline, due date: 2020-10-09, project: travel
-5: learn Gradle, due date: 2020-10-28, project: programming
-6: book train tickets, due date: 2020-10-30, project: travel
+1: make a list of guests, due date: 2020-12-31, project: Ney Year party
+2: buy a poster, due date: 2020-12-31, project: house decoration
+3: learn Gradle, due date: 2020-10-28, project: programming
+4: buy a guide, due date: 2020-10-01, project: travel
+5: make a route, due date: 2020-10-05, project: travel
+6: get some advice from Aline, due date: 2020-10-09, project: travel
+7: book train tickets, due date: 2020-10-30, project: travel
