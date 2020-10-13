@@ -1,4 +1,4 @@
-package jetbrains;
+package main.java.toDoList;
 
 import java.util.Comparator;
 
