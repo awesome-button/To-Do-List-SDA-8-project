@@ -1,17 +1,12 @@
 package jetbrains;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 
 public class UserInterface {
 
         TaskCollection collection;
         Scanner scanner;
+        FileManager fileManager;
 
     /**
      * Constructor method where a new collection of tasks and a scanner are initialized
@@ -19,6 +14,7 @@ public class UserInterface {
     public UserInterface() {
         this.collection = new TaskCollection();
         this.scanner = new Scanner(System.in);
+        this.fileManager = new FileManager();
     }
 
     /**
@@ -26,7 +22,7 @@ public class UserInterface {
      * message and asking user to choose and enter a command.
      */
     public void start() {
-        openSavedTasks();
+        fileManager.openSavedTasks(this.collection);
         printWelcome();
         boolean finished = false;
 
@@ -48,18 +44,18 @@ public class UserInterface {
         switch (command) {
             case 1:
                 sortTasks();
-                printTasks();
+                System.out.println(this.collection.getTasks());
                 break;
             case 2:
                 createTask();
-                printTasks();
+                System.out.println(this.collection.getTasks());
                 break;
             case 3:
                 editTask();
                 break;
             case 4:
-                createFile();
-                saveChanges();
+                fileManager.createFile();
+                fileManager.saveChanges(this.collection);
                 printByeMessage();
                 wantToQuit = true;
                 break;
@@ -82,91 +78,6 @@ public class UserInterface {
         }
     }
 
-    public void createFile() {
-        File newFile = new File("savedTasks.txt");
-    }
-
-    public void saveChanges() {
-        try {
-            FileWriter writer = new FileWriter("savedTasks.txt");
-            writer.write(this.collection.getTasks());
-            writer.close();
-            System.out.println("wrote to the file");
-        } catch(IOException e) {
-            e.getMessage();
-        }
-    }
-
-    public void openSavedTasks() {
-        try {
-            File file = new File("savedTasks.txt");
-            Scanner reader = new Scanner(file);
-            while (reader.hasNextLine()) {
-                String data = reader.nextLine();
-
-                String title = "";
-                String project= "";
-                LocalDate date = null;
-
-                Pattern titlePattern = Pattern.compile("([a-zA-Z\\s]+)");
-                Matcher m1 = titlePattern.matcher(data);
-
-                Pattern datePattern = Pattern.compile("([\\d-]+(?!:))");
-                Matcher m2 = datePattern.matcher(data);
-
-                Pattern projectPattern = Pattern.compile("(?<=project: ).*");
-                Matcher m3 = projectPattern.matcher(data);
-
-                if (m1.find()) {
-                    title = m1.group().trim();
-                }
-
-                if (m2.find()) {
-                    String d = m2.group();
-                    date = LocalDate.parse(m2.group());
-                }
-
-                if (m3.find()) {
-                    project = m3.group();
-                }
-
-                this.collection.addTask(new Task(title, date, project));
-
-            }
-            reader.close();
-        } catch(IOException e) {
-            e.getMessage();
-        }
-    }
-
-    public void printWelcome() {
-        if (this.collection.isEmpty()) {
-            System.out.println("Welcome to \"Get It Done!\"\n");
-        } else {
-            System.out.println("Welcome back to \"Get It Done!\"\n");
-            printTasks();
-        }
-
-    }
-
-    public void printByeMessage() {
-        System.out.println("Your tasks have been saved.\nWelcome back whenever you need to Get It Done!");
-    }
-
-    public void printCommands() {
-        System.out.println(
-                "Pick an option:\n" +
-                "(1) Show task list(by project or date)\n" +
-                "(2) Add new task\n" +
-                "(3) Edit task(update, mark as done, remove)\n" +
-                "(4) Save and quit\n");
-    }
-
-    public void printTasks() {
-        System.out.println("The following tasks are now on your list:\n");
-        System.out.println(this.collection.getTasks());
-    }
-
     public void createTask() {
         System.out.println("For which project do you want to create a task?"); // should not ask the question if there is only one project
         String project = scanner.nextLine();
@@ -184,9 +95,8 @@ public class UserInterface {
     public void editTask() {
         //add a case for when there are no tasks on the list
 
-        System.out.println("which task would you like to edit?");
-        System.out.println(collection.getTasks());
-
+        System.out.println("Which task would you like to edit?");
+        System.out.println(this.collection.getTasks());
         int taskIndex = Integer.valueOf(scanner.nextLine()) - 1;
         Task selectedTask = this.collection.getTask(taskIndex);
 
@@ -215,12 +125,38 @@ public class UserInterface {
         if (action == 3) {
             if (this.collection.removeTask(selectedTask)) {
                 System.out.println("Task (" + (taskIndex + 1) + ") has been removed from your list\n");
-                printTasks();
+                System.out.println(this.collection.getTasks());
             } else {
                 System.out.println("Something went wrong. Try it again"); // repeating code, exception?
             }
         }
     }
 
+
+
+    public void printByeMessage() {
+        System.out.println("Your tasks have been saved.\nWelcome back whenever you need to Get It Done!");
+    }
+
+
+
+    public void printWelcome() {
+        if (this.collection.isEmpty()) {
+            System.out.println("Welcome to \"Get It Done!\"\n");
+        } else {
+            System.out.println("Welcome back to \"Get It Done!\"\n");
+            this.collection.getTasks();
+        }
+
+    }
+
+    public void printCommands() {
+        System.out.println(
+                "Pick an option:\n" +
+                "(1) Show task list(by project or date)\n" +
+                "(2) Add new task\n" +
+                "(3) Edit task(update, mark as done, remove)\n" +
+                "(4) Save and quit\n");
+    }
 
 }
