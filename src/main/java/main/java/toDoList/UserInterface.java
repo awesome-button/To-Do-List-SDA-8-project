@@ -118,7 +118,7 @@ public class UserInterface {
                 this.collection.removeTask(selectedTask);
                 System.out.println("The task (" + (taskIndex+1) + ") has been marked as done");
             } else {
-                System.out.println("Something went wrong. Try it again");
+                printErrorMessage();
             }
         }
 
@@ -127,12 +127,14 @@ public class UserInterface {
                 System.out.println("Task (" + (taskIndex + 1) + ") has been removed from your list\n");
                 System.out.println(this.collection.getTasks());
             } else {
-                System.out.println("Something went wrong. Try it again");
+                printErrorMessage();
             }
         }
     }
 
-
+    public void printErrorMessage() {
+        System.out.println("Something went wrong. Try it again");
+    }
 
     public void printByeMessage() {
         System.out.println("Your tasks have been saved.\nWelcome back whenever you need to Get It Done!");
