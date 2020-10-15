@@ -130,13 +130,13 @@ public class UserInterface {
                 validTaskIndex = true;
 
                 System.out.println("What would you like to do?\n" +
-                "Pick an option:\n" +
-                "(1) Update the name\n" +
-                "(2) Update the due date\n" +
-                "(3) Update the project name\n" +
-                "(4) Mark as done\n" +
-                "(5) Remove");
-                
+                        "Pick an option:\n" +
+                        "(1) Update the name\n" +
+                        "(2) Update the due date\n" +
+                        "(3) Update the project name\n" +
+                        "(4) Mark as done\n" +
+                        "(5) Remove");
+
                 int action = Integer.valueOf(scanner.nextLine());
 
                 switch (action) {
@@ -158,7 +158,7 @@ public class UserInterface {
                     case 4:
                         if (selectedTask.markDone()) {
                             this.collection.removeTask(selectedTask);
-                            System.out.println("The task (" + (taskIndex+1) + ") has been marked as done");
+                            System.out.println("The task (" + (taskIndex + 1) + ") has been marked as done");
                         } else {
                             printErrorMessage();
                         }
@@ -174,13 +174,13 @@ public class UserInterface {
                         printErrorMessage();
                         break;
 
-            } catch (IndexOutOfBoundsException e) {
-                System.out.println("\nPlease choose the task from the list. You have only " + this.collection.getSize() +
-                        " tasks on your list at the moment.");
+                }
+            } catch(IndexOutOfBoundsException e){
+                    System.out.println("\nPlease choose the task from the list. You have only " + this.collection.getSize() +
+                            " tasks on your list at the moment.");
             }
 
         }
-
     }
 
     public void printErrorMessage() {
