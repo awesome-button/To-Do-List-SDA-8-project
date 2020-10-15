@@ -46,7 +46,7 @@ public class UserInterface {
         switch (command) {
             case 1:
                 sortTasks();
-                System.out.println(this.collection.getTasks());
+                System.out.println(collection.getTasks());
                 break;
             case 2:
                 createTask();
@@ -65,17 +65,27 @@ public class UserInterface {
     }
 
     public void sortTasks() {
-        System.out.println("Sort by task project(1) or due date(2)?");
 
-        int answer = Integer.valueOf(scanner.nextLine());
+        boolean validInput = false;
 
-        switch (answer) {
-            case 1:
-                collection.sortByProject();
-                break;
-            case 2:
-                collection.sortByDate();
-                break;
+        while (!validInput) {
+            System.out.println("Sort by task project(1) or due date(2)?");
+
+            int answer = Integer.valueOf(scanner.nextLine());
+
+            switch (answer) {
+                case 1:
+                    collection.sortByProject();
+                    validInput = true;
+                    break;
+                case 2:
+                    collection.sortByDate();
+                    validInput = true;
+                    break;
+                default:
+                    break;
+            }
+
         }
     }
 
