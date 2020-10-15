@@ -103,33 +103,45 @@ public class UserInterface {
         System.out.println("What would you like to do?\n" +
                 "Pick an option:\n" +
                 "(1) Update the name\n" +
-                "(2) Mark as done\n" +
-                "(3) Remove");
+                "(2) Update the due date" +
+                "(3) Update the project name" +
+                "(4) Mark as done\n" +
+                "(5) Remove");
         int action = Integer.valueOf(scanner.nextLine());
 
-        if (action == 1) {
-            System.out.println("Write a new name for your task: ");
-            String newTitle = scanner.nextLine();
-            selectedTask.setTitle(newTitle);
+        switch (action) {
+            case 1:
+                System.out.println("Write a new name for your task: ");
+                String newTitle = scanner.nextLine();
+                selectedTask.setTitle(newTitle);
+                break;
+            case 2:
+                System.out.println("Write a new due date for your task in the format yyyy-mm-dd: ");
+                LocalDate newDate = LocalDate.parse(scanner.nextLine());
+                selectedTask.setDueDate(newDate);
+                break;
+            case 3:
+                System.out.println("Write a new name for the project your task belongs to: ");
+                String newProject = scanner.nextLine();
+                selectedTask.setProject(newProject);
+                break;
+            case 4:
+                if (selectedTask.markDone()) {
+                    this.collection.removeTask(selectedTask);
+                    System.out.println("The task (" + (taskIndex+1) + ") has been marked as done");
+                } else {
+                    printErrorMessage();
+                }
+                break;
+            case 5:
+                if (this.collection.removeTask(selectedTask)) {
+                    System.out.println("Task (" + (taskIndex + 1) + ") has been removed from your list\n");
+                } else {
+                    printErrorMessage();
+                }
+                break;
         }
 
-        if (action == 2) {
-            if (selectedTask.markDone()) {
-                this.collection.removeTask(selectedTask);
-                System.out.println("The task (" + (taskIndex+1) + ") has been marked as done");
-            } else {
-                printErrorMessage();
-            }
-        }
-
-        if (action == 3) {
-            if (this.collection.removeTask(selectedTask)) {
-                System.out.println("Task (" + (taskIndex + 1) + ") has been removed from your list\n");
-                System.out.println(this.collection.getTasks());
-            } else {
-                printErrorMessage();
-            }
-        }
     }
 
     public void printErrorMessage() {
