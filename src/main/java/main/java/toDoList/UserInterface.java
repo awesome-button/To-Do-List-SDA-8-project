@@ -26,11 +26,12 @@ public class UserInterface {
     public void start() {
         fileManager.openSavedTasks(this.collection);
         printWelcome();
+        printCommands();
+
         boolean finished = false;
 
         while (!finished) {
-            printCommands();
-            System.out.println("Enter command:");
+            System.out.println("Press 0 for list of commands\n\nEnter command: ");
             int command = Integer.valueOf(scanner.nextLine());
             finished = processCommand(command);
         }
@@ -44,6 +45,9 @@ public class UserInterface {
         boolean wantToQuit = false;
 
         switch (command) {
+            case 0:
+                printCommands();
+                break;
             case 1:
                 sortTasks();
                 System.out.println(collection.getTasks());
@@ -116,37 +120,51 @@ public class UserInterface {
 
         System.out.println("Which task would you like to edit?");
         System.out.println(this.collection.getTasks());
-        int taskIndex = Integer.valueOf(scanner.nextLine()) - 1;
-        Task selectedTask = this.collection.getTask(taskIndex);
 
-        System.out.println("What would you like to do?\n" +
-                "Pick an option:\n" +
-                "(1) Update the name\n" +
-                "(2) Mark as done\n" +
-                "(3) Remove");
-        int action = Integer.valueOf(scanner.nextLine());
+        boolean validTaskIndex = false;
 
-        if (action == 1) {
-            System.out.println("Write a new name for your task: ");
-            String newTitle = scanner.nextLine();
-            selectedTask.setTitle(newTitle);
-        }
+        while (!validTaskIndex) {
+            try {
+                int taskIndex = Integer.valueOf(scanner.nextLine()) - 1;
+                Task selectedTask = this.collection.getTask(taskIndex);
+                validTaskIndex = true;
 
-        if (action == 2) {
-            if (selectedTask.markDone()) {
-                this.collection.removeTask(selectedTask);
-                System.out.println("The task (" + (taskIndex+1) + ") has been marked as done");
-            } else {
-                printErrorMessage();
-            }
-        }
+                System.out.println("What would you like to do?\n" +
+                        "Pick an option:\n" +
+                        "(1) Update the name\n" +
+                        "(2) Mark as done\n" +
+                        "(3) Remove");
+                int action = Integer.valueOf(scanner.nextLine());
 
-        if (action == 3) {
-            if (this.collection.removeTask(selectedTask)) {
-                System.out.println("Task (" + (taskIndex + 1) + ") has been removed from your list\n");
-                System.out.println(this.collection.getTasks());
-            } else {
-                printErrorMessage();
+                if (action == 1) {
+                    System.out.println("The current name for your task is \'" + selectedTask.getTitle() +
+                            "\'. Write a new name for your task: ");
+                    String newTitle = scanner.nextLine();
+                    selectedTask.setTitle(newTitle);
+                    System.out.println("Your task has been renamed to \'" + newTitle + "\'");
+                }
+
+                if (action == 2) {
+                    if (selectedTask.markDone()) {
+                        this.collection.removeTask(selectedTask);
+                        System.out.println("The task (" + (taskIndex+1) + ") has been marked as done");
+                    } else {
+                        printErrorMessage();
+                    }
+                }
+
+                if (action == 3) {
+                    if (this.collection.removeTask(selectedTask)) {
+                        System.out.println("Task (" + (taskIndex + 1) + ") has been removed from your list\n");
+                        System.out.println(this.collection.getTasks());
+                    } else {
+                        printErrorMessage();
+                    }
+                }
+
+            } catch (IndexOutOfBoundsException e) {
+                System.out.println("\nPlease choose the task from the list. You have only " + this.collection.getSize() +
+                        " tasks on your list at the moment.");
             }
         }
     }
@@ -174,7 +192,7 @@ public class UserInterface {
 
     public void printCommands() {
         System.out.println(
-                "Pick an option:\n" +
+                "Commands:\n" +
                 "(1) Show task list(by project or date)\n" +
                 "(2) Add new task\n" +
                 "(3) Edit task(update, mark as done, remove)\n" +
