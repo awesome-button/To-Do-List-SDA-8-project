@@ -103,8 +103,8 @@ public class UserInterface {
         System.out.println("What would you like to do?\n" +
                 "Pick an option:\n" +
                 "(1) Update the name\n" +
-                "(2) Update the due date" +
-                "(3) Update the project name" +
+                "(2) Update the due date\n" +
+                "(3) Update the project name\n" +
                 "(4) Mark as done\n" +
                 "(5) Remove");
         int action = Integer.valueOf(scanner.nextLine());
@@ -140,12 +140,16 @@ public class UserInterface {
                     printErrorMessage();
                 }
                 break;
+            default:
+                printErrorMessage();
+                break;
+
         }
 
     }
 
     public void printErrorMessage() {
-        System.out.println("Something went wrong. Try it again");
+        System.out.println("Something went wrong. Try it again\n");
     }
 
     public void printByeMessage() {
