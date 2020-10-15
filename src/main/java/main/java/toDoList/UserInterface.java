@@ -1,6 +1,7 @@
 package main.java.toDoList;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 public class UserInterface {
@@ -49,7 +50,6 @@ public class UserInterface {
                 break;
             case 2:
                 createTask();
-                System.out.println(this.collection.getTasks());
                 break;
             case 3:
                 editTask();
@@ -87,10 +87,19 @@ public class UserInterface {
         String title = scanner.nextLine();
 
         System.out.println("By when shall it be done? (date in format yyyy-mm-dd)"); // should handle exceptions, wrong format or a date before today
-        LocalDate dueDate = LocalDate.parse(scanner.nextLine());
 
-        Task task = new Task(title, dueDate, project);
-        this.collection.addTask(task);
+        //Throws an exception and notifies user that the date is in the wrong format
+        try {
+            LocalDate dueDate = LocalDate.parse(scanner.nextLine());
+            Task task = new Task(title, dueDate, project);
+            this.collection.addTask(task);
+            System.out.println("\nThe task \'" + title + "\' has been created for" +
+                    "the project \'" + project + "\' with due date on " + dueDate.toString() + "\n");
+
+        } catch(DateTimeParseException e) {
+            System.out.println("Error: please put the due date in the format yyyy-mm-dd.\n");
+        }
+
     }
 
     public void editTask() {
@@ -134,6 +143,7 @@ public class UserInterface {
 
     public void printErrorMessage() {
         System.out.println("Something went wrong. Try it again");
+        return;
     }
 
     public void printByeMessage() {
