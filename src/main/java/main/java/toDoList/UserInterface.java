@@ -1,5 +1,7 @@
 package main.java.toDoList;
 
+import org.w3c.dom.ls.LSOutput;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
@@ -49,8 +51,7 @@ public class UserInterface {
                 printCommands();
                 break;
             case 1:
-                sortTasks();
-                System.out.println(collection.getTasks());
+                displayTasks();
                 break;
             case 2:
                 createTask();
@@ -66,6 +67,16 @@ public class UserInterface {
                 break;
         }
         return wantToQuit;
+    }
+
+
+    public void displayTasks() {
+        if (this.collection.isEmpty()) {
+            System.out.println("There are no tasks on your list yet");
+        } else {
+            sortTasks();
+            System.out.println(this.collection.getTasks());
+        }
     }
 
     public void sortTasks() {
@@ -107,7 +118,7 @@ public class UserInterface {
             LocalDate dueDate = LocalDate.parse(scanner.nextLine());
             Task task = new Task(title, dueDate, project);
             this.collection.addTask(task);
-            System.out.println("\nThe task \'" + title + "\' has been created for" +
+            System.out.println("\nThe task \'" + title + "\' has been created for " +
                     "the project \'" + project + "\' with due date on " + dueDate.toString() + "\n");
 
         } catch(DateTimeParseException e) {
@@ -117,6 +128,11 @@ public class UserInterface {
     }
 
     public void editTask() {
+
+        if (this.collection.isEmpty()) {
+            System.out.println("There are no tasks on your list yet");
+            return;
+        }
 
         System.out.println("Which task would you like to edit?");
         System.out.println(this.collection.getTasks());
@@ -213,3 +229,10 @@ public class UserInterface {
     }
 
 }
+
+//1: make a list of guests, due date: 2020-12-31, project: Ney Year party
+//        2: buy a poster, due date: 2020-12-31, project: house decoration
+//        3: learn Gradle, due date: 2020-10-28, project: programming
+//        4: buy a guide, due date: 2020-12-23, project: travel
+//        5: get some advice from Aline, due date: 2020-10-09, project: travel
+//        6: book train tickets, due date: 2020-10-30, project: travel
