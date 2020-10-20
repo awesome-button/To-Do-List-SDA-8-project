@@ -1,7 +1,4 @@
 package main.java.toDoList;
-
-import org.w3c.dom.ls.LSOutput;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
@@ -37,7 +34,6 @@ public class UserInterface {
 
         while (!finished) {
             System.out.println("Press 0 for list of commands\n\nEnter command: ");
-
             try {
                 int command = Integer.valueOf(scanner.nextLine());
                 finished = processCommand(command);
@@ -45,7 +41,6 @@ public class UserInterface {
             catch(IllegalArgumentException e) {
                 inexistingCommandMessage();
             }
-
         }
     }
 
@@ -88,10 +83,6 @@ public class UserInterface {
         return wantToQuit;
     }
 
-    public void inexistingCommandMessage() {
-        System.out.println("Oops! The command you entered does not exist.");
-    }
-
     public void displayTasks(TaskCollection list) {
         if (list.isEmpty()) {
             System.out.println("There are no tasks on this list yet");
@@ -107,22 +98,22 @@ public class UserInterface {
 
         while (!validInput) {
             System.out.println("Sort by task project(1) or due date(2)?");
-
-            int answer = Integer.valueOf(scanner.nextLine());
-
-            switch (answer) {
-                case 1:
-                    list.sortByProject();
-                    validInput = true;
-                    break;
-                case 2:
-                    list.sortByDate();
-                    validInput = true;
-                    break;
-                default:
-                    break;
+            try {
+                int answer = Integer.valueOf(scanner.nextLine());
+                switch (answer) {
+                    case 1:
+                        list.sortByProject();
+                        validInput = true;
+                        break;
+                    case 2:
+                        list.sortByDate();
+                        validInput = true;
+                        break;
+                    default: inexistingCommandMessage();
+                }
+            } catch(IllegalArgumentException e) {
+                inexistingCommandMessage();
             }
-
         }
     }
 
@@ -155,26 +146,41 @@ public class UserInterface {
             System.out.println("There are no tasks on your list yet");
             return;
         }
-
-        System.out.println("Which task would you like to edit?");
-        System.out.println(this.collection.getTasks());
       
         boolean validTaskIndex = false;
+        Task selectedTask = null;
+        int taskIndex = -1;
 
         while (!validTaskIndex) {
+            System.out.println("Which task would you like to edit?\n");
+            System.out.println(this.collection.getTasks());
+
             try {
-                int taskIndex = Integer.valueOf(scanner.nextLine()) - 1;
-                Task selectedTask = this.collection.getTask(taskIndex);
+                taskIndex = Integer.valueOf(scanner.nextLine()) - 1;
+                selectedTask = this.collection.getTask(taskIndex);
                 validTaskIndex = true;
+            }
+            catch (IndexOutOfBoundsException e) {
+                System.out.println("\nPlease choose the task from the list. You have only " + this.collection.getSize() +
+                        " task(s) on your list at the moment.\n");
+            }
+            catch (IllegalArgumentException e) {
+                System.out.println("Please choose a task from the list.\n");
+            }
+        }
 
-                System.out.println("What would you like to do?\n" +
-                        "Pick an option:\n" +
-                        "(1) Update the name\n" +
-                        "(2) Update the due date\n" +
-                        "(3) Update the project name\n" +
-                        "(4) Mark as done\n" +
-                        "(5) Remove");
+        boolean validCommand = false;
 
+        while (!validCommand) {
+            System.out.println("What would you like to do?\n" +
+                    "Pick an option:\n" +
+                    "(1) Update the name\n" +
+                    "(2) Update the due date\n" +
+                    "(3) Update the project name\n" +
+                    "(4) Mark as done\n" +
+                    "(5) Remove");
+
+            try {
                 int action = Integer.valueOf(scanner.nextLine());
 
                 switch (action) {
@@ -182,16 +188,19 @@ public class UserInterface {
                         System.out.println("Write a new name for your task: ");
                         String newTitle = scanner.nextLine();
                         selectedTask.setTitle(newTitle);
+                        validCommand = true;
                         break;
                     case 2:
                         System.out.println("Write a new due date for your task in the format yyyy-mm-dd: ");
                         LocalDate newDate = LocalDate.parse(scanner.nextLine());
                         selectedTask.setDueDate(newDate);
+                        validCommand = true;
                         break;
                     case 3:
                         System.out.println("Write a new name for the project your task belongs to: ");
                         String newProject = scanner.nextLine();
                         selectedTask.setProject(newProject);
+                        validCommand = true;
                         break;
                     case 4:
                         selectedTask.markDone();
@@ -199,6 +208,7 @@ public class UserInterface {
                         this.logCompletedTasks.addTask(selectedTask);
                         System.out.println("The task (" + (taskIndex + 1) + ") has been marked as done." +
                                 "You can still view it in the log");
+                        validCommand = true;
                         break;
                     case 5:
                         if (this.collection.removeTask(selectedTask)) {
@@ -206,28 +216,30 @@ public class UserInterface {
                         } else {
                             printErrorMessage();
                         }
+                        validCommand = true;
                         break;
                     default:
                         inexistingCommandMessage();
-                        break;
                 }
-            } catch(IndexOutOfBoundsException e){
-                    System.out.println("\nPlease choose the task from the list. You have only " + this.collection.getSize() +
-                            " tasks on your list at the moment.");
-            }
 
+            } catch (IllegalArgumentException e) {
+                inexistingCommandMessage();
+            }
         }
+
     }
 
     public void printErrorMessage() {
         System.out.println("Something went wrong. Try it again\n");
     }
 
+    public void inexistingCommandMessage() {
+        System.out.println("Oops! The command you entered does not exist.\n");
+    }
+
     public void printByeMessage() {
         System.out.println("Your tasks have been saved.\nWelcome back whenever you need to Get It Done!");
     }
-
-
 
     public void printWelcome() {
         if (this.collection.isEmpty()) {
