@@ -1,8 +1,9 @@
 package main.java.toDoList;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Comparator;
 
-public class Task {
+public class Task implements Serializable {
     String title, project;
     LocalDate dueDate;
     boolean isDone;
