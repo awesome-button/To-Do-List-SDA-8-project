@@ -9,6 +9,7 @@ import java.util.Scanner;
 public class UserInterface {
 
         TaskCollection collection;
+        TaskCollection logCompletedTasks;
         Scanner scanner;
         FileManager fileManager;
 
@@ -17,6 +18,7 @@ public class UserInterface {
      */
     public UserInterface() {
         this.collection = new TaskCollection();
+        this.logCompletedTasks = new TaskCollection();
         this.scanner = new Scanner(System.in);
         this.fileManager = new FileManager();
     }
@@ -26,7 +28,8 @@ public class UserInterface {
      * message and asking user to choose and enter a command.
      */
     public void start() {
-        this.collection = fileManager.openSavedTasks();
+        this.collection = fileManager.openSavedTasks("savedTasks.txt");
+        this.logCompletedTasks = fileManager.openSavedTasks("logCompletedTasks.txt");
         printWelcome();
         printCommands();
 
@@ -51,7 +54,7 @@ public class UserInterface {
                 printCommands();
                 break;
             case 1:
-                displayTasks();
+                displayTasks(this.collection);
                 break;
             case 2:
                 createTask();
@@ -60,8 +63,13 @@ public class UserInterface {
                 editTask();
                 break;
             case 4:
-                fileManager.createFile();
-                fileManager.saveChanges(this.collection);
+                displayTasks(this.logCompletedTasks);
+                break;
+            case 5:
+                fileManager.createFile("savedTasks.txt");
+                fileManager.saveChanges(this.collection, "savedTasks.txt");
+                fileManager.createFile("logCompletedTasks.txt");
+                fileManager.saveChanges(this.logCompletedTasks, "logCompletedTasks.txt");
                 printByeMessage();
                 wantToQuit = true;
                 break;
@@ -70,16 +78,16 @@ public class UserInterface {
     }
 
 
-    public void displayTasks() {
-        if (this.collection.isEmpty()) {
-            System.out.println("There are no tasks on your list yet");
+    public void displayTasks(TaskCollection list) {
+        if (list.isEmpty()) {
+            System.out.println("There are no tasks on this list yet");
         } else {
-            sortTasks();
-            System.out.println(this.collection.getTasks());
+            sortTasks(list);
+            System.out.println(list.getTasks());
         }
     }
 
-    public void sortTasks() {
+    public void sortTasks(TaskCollection list) {
 
         boolean validInput = false;
 
@@ -90,11 +98,11 @@ public class UserInterface {
 
             switch (answer) {
                 case 1:
-                    collection.sortByProject();
+                    list.sortByProject();
                     validInput = true;
                     break;
                 case 2:
-                    collection.sortByDate();
+                    list.sortByDate();
                     validInput = true;
                     break;
                 default:
@@ -172,12 +180,11 @@ public class UserInterface {
                         selectedTask.setProject(newProject);
                         break;
                     case 4:
-                        if (selectedTask.markDone()) {
-                            this.collection.removeTask(selectedTask);
-                            System.out.println("The task (" + (taskIndex + 1) + ") has been marked as done");
-                        } else {
-                            printErrorMessage();
-                        }
+                        selectedTask.markDone();
+                        this.collection.removeTask(selectedTask);
+                        this.logCompletedTasks.addTask(selectedTask);
+                        System.out.println("The task (" + (taskIndex + 1) + ") has been marked as done." +
+                                "You can still view it in the log");
                         break;
                     case 5:
                         if (this.collection.removeTask(selectedTask)) {
@@ -225,7 +232,8 @@ public class UserInterface {
                 "(1) Show task list(by project or date)\n" +
                 "(2) Add new task\n" +
                 "(3) Edit task(update, mark as done, remove)\n" +
-                "(4) Save and quit\n");
+                "(4) View log of completed tasks\n" +
+                "(5) Save and quit\n");
     }
 
 }

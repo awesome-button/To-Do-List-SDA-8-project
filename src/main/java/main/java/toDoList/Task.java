@@ -1,7 +1,6 @@
 package main.java.toDoList;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Comparator;
 
 public class Task implements Serializable {
     String title, project;
@@ -39,14 +38,8 @@ public class Task implements Serializable {
         this.project = project;
     }
 
-    //the task should also be automatically removed from the list
-    public boolean markDone() {
+    public void markDone() {
         this.isDone = true;
-        return this.isDone; //side effect? how to handle it in a different way?
-    }
-
-    public void formatDate() {
-
     }
 
     public String toString() {
