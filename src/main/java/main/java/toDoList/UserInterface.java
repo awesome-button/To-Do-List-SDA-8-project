@@ -37,8 +37,15 @@ public class UserInterface {
 
         while (!finished) {
             System.out.println("Press 0 for list of commands\n\nEnter command: ");
-            int command = Integer.valueOf(scanner.nextLine());
-            finished = processCommand(command);
+
+            try {
+                int command = Integer.valueOf(scanner.nextLine());
+                finished = processCommand(command);
+            }
+            catch(IllegalArgumentException e) {
+                inexistingCommandMessage();
+            }
+
         }
     }
 
@@ -73,10 +80,17 @@ public class UserInterface {
                 printByeMessage();
                 wantToQuit = true;
                 break;
+            default:
+                inexistingCommandMessage();
+                break;
         }
+
         return wantToQuit;
     }
 
+    public void inexistingCommandMessage() {
+        System.out.println("Oops! The command you entered does not exist.");
+    }
 
     public void displayTasks(TaskCollection list) {
         if (list.isEmpty()) {
@@ -194,9 +208,8 @@ public class UserInterface {
                         }
                         break;
                     default:
-                        printErrorMessage();
+                        inexistingCommandMessage();
                         break;
-
                 }
             } catch(IndexOutOfBoundsException e){
                     System.out.println("\nPlease choose the task from the list. You have only " + this.collection.getSize() +
