@@ -1,15 +1,21 @@
 package main.java.toDoList;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class TaskCollection {
+public class TaskCollection implements Serializable {
         ArrayList<Task> tasks;
 
         public TaskCollection() {
             this.tasks = new ArrayList<>();
         }
+
+        public TaskCollection(ArrayList<Task> tasks) {
+        this.tasks = tasks;
+        }
+
 
         public int getSize() {
             return this.tasks.size();

@@ -26,7 +26,7 @@ public class UserInterface {
      * message and asking user to choose and enter a command.
      */
     public void start() {
-        fileManager.openSavedTasks(this.collection);
+        this.collection = fileManager.openSavedTasks();
         printWelcome();
         printCommands();
 
