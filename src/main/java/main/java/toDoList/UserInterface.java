@@ -29,7 +29,10 @@ public class UserInterface {
         this.logCompletedTasks = fileManager.openSavedTasks("logCompletedTasks.txt");
         printWelcome();
         printCommands();
+        acceptInput();
+    }
 
+    public void acceptInput() {
         boolean finished = false;
 
         while (!finished) {
@@ -43,7 +46,6 @@ public class UserInterface {
             }
         }
     }
-
     /**
      * Accept input command from user and continue with execution based on the command
      * @param command
@@ -97,7 +99,8 @@ public class UserInterface {
         boolean validInput = false;
 
         while (!validInput) {
-            System.out.println("Sort by task project(1) or due date(2)?");
+            System.out.println("Sort by task project(1) or due date(2)?\n" +
+                    "(type -1 to go to the previous command menu)");
             try {
                 int answer = Integer.valueOf(scanner.nextLine());
                 switch (answer) {
@@ -108,6 +111,10 @@ public class UserInterface {
                     case 2:
                         list.sortByDate();
                         validInput = true;
+                        break;
+                    case -1:
+                        printCommands();
+                        acceptInput();
                         break;
                     default: inexistingCommandMessage();
                 }
@@ -133,7 +140,6 @@ public class UserInterface {
             this.collection.addTask(task);
             System.out.println("\nThe task \'" + title + "\' has been created for " +
                     "the project \'" + project + "\' with due date on " + dueDate.toString() + "\n");
-
         } catch(DateTimeParseException e) {
             System.out.println("Error: please put the due date in the format yyyy-mm-dd.\n");
         }
@@ -146,29 +152,34 @@ public class UserInterface {
             System.out.println("There are no tasks on your list yet");
             return;
         }
-      
-        boolean validTaskIndex = false;
-        Task selectedTask = null;
-        int taskIndex = -1;
 
-        while (!validTaskIndex) {
+        int taskIndex = selectTaskToEdit();
+        Task selectedTask = this.collection.getTask(taskIndex);
+
+        processEditCommand(selectedTask, taskIndex);
+
+    }
+
+    public int selectTaskToEdit() {
+
+        while (true) {
             System.out.println("Which task would you like to edit?\n");
             System.out.println(this.collection.getTasks());
 
             try {
-                taskIndex = Integer.valueOf(scanner.nextLine()) - 1;
-                selectedTask = this.collection.getTask(taskIndex);
-                validTaskIndex = true;
-            }
-            catch (IndexOutOfBoundsException e) {
+                int taskIndex = Integer.valueOf(scanner.nextLine()) - 1;
+                this.collection.getTask(taskIndex);
+                return taskIndex;
+            } catch (IndexOutOfBoundsException e) {
                 System.out.println("\nPlease choose the task from the list. You have only " + this.collection.getSize() +
                         " task(s) on your list at the moment.\n");
-            }
-            catch (IllegalArgumentException e) {
+            } catch (IllegalArgumentException e) {
                 System.out.println("Please choose a task from the list.\n");
             }
         }
+    }
 
+    public void processEditCommand(Task selectedTask, int taskIndex) {
         boolean validCommand = false;
 
         while (!validCommand) {
@@ -178,8 +189,8 @@ public class UserInterface {
                     "(2) Update the due date\n" +
                     "(3) Update the project name\n" +
                     "(4) Mark as done\n" +
-                    "(5) Remove");
-
+                    "(5) Remove\n" +
+                    "(-1) go to the main command menu");
             try {
                 int action = Integer.valueOf(scanner.nextLine());
 
@@ -218,6 +229,9 @@ public class UserInterface {
                         }
                         validCommand = true;
                         break;
+                    case -1:
+                        printCommands();
+                        acceptInput();
                     default:
                         inexistingCommandMessage();
                 }
@@ -226,7 +240,6 @@ public class UserInterface {
                 inexistingCommandMessage();
             }
         }
-
     }
 
     public void printErrorMessage() {
