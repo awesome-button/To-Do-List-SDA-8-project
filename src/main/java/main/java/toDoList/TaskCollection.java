@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class TaskCollection implements Serializable {
         ArrayList<Task> tasks;
@@ -11,11 +13,6 @@ public class TaskCollection implements Serializable {
         public TaskCollection() {
             this.tasks = new ArrayList<>();
         }
-
-        public TaskCollection(ArrayList<Task> tasks) {
-        this.tasks = tasks;
-        }
-
 
         public int getSize() {
             return this.tasks.size();
@@ -49,7 +46,12 @@ public class TaskCollection implements Serializable {
         }
 
         public void sortByProject() {
-            Collections.sort(tasks, new SorterByProject());
+            
+            List<Task> list = this.tasks.stream()
+                    .sorted((task1, task2) -> task1.getProject().compareTo(task2.getProject()))
+                    .collect(Collectors.toList());
+            this.tasks = new ArrayList<Task>(list);
+
         }
 
         public void sortByDate() {
