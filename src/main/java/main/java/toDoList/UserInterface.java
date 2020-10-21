@@ -29,10 +29,10 @@ public class UserInterface {
         this.logCompletedTasks = fileManager.openSavedTasks("logCompletedTasks.txt");
         printWelcome();
         printCommands();
-        acceptInput();
+        acceptCommand();
     }
 
-    public void acceptInput() {
+    public void acceptCommand() {
         boolean finished = false;
 
         while (!finished) {
@@ -42,7 +42,7 @@ public class UserInterface {
                 finished = processCommand(command);
             }
             catch(IllegalArgumentException e) {
-                inexistingCommandMessage();
+                printInexistingCommandMessage();
             }
         }
     }
@@ -70,18 +70,14 @@ public class UserInterface {
                 displayTasks(this.logCompletedTasks);
                 break;
             case 5:
-                fileManager.createFile("savedTasks.txt");
-                fileManager.saveChanges(this.collection, "savedTasks.txt");
-                fileManager.createFile("logCompletedTasks.txt");
-                fileManager.saveChanges(this.logCompletedTasks, "logCompletedTasks.txt");
+                saveChanges();
                 printByeMessage();
                 wantToQuit = true;
                 break;
             default:
-                inexistingCommandMessage();
+                printInexistingCommandMessage();
                 break;
         }
-
         return wantToQuit;
     }
 
@@ -114,12 +110,12 @@ public class UserInterface {
                         break;
                     case -1:
                         printCommands();
-                        acceptInput();
+                        acceptCommand();
                         break;
-                    default: inexistingCommandMessage();
+                    default: printInexistingCommandMessage();
                 }
             } catch(IllegalArgumentException e) {
-                inexistingCommandMessage();
+                printInexistingCommandMessage();
             }
         }
     }
@@ -133,15 +129,17 @@ public class UserInterface {
 
         System.out.println("By when shall it be done? (date in format yyyy-mm-dd)"); // should handle exceptions, wrong format or a date before today
 
-        //Throws an exception and notifies user that the date is in the wrong format
         try {
             LocalDate dueDate = LocalDate.parse(scanner.nextLine());
             Task task = new Task(title, dueDate, project);
-            this.collection.addTask(task);
+
+            if (this.collection.addTask(task)) {
             System.out.println("\nThe task \'" + title + "\' has been created for " +
                     "the project \'" + project + "\' with due date on " + dueDate.toString() + "\n");
+            }
+
         } catch(DateTimeParseException e) {
-            System.out.println("Error: please put the due date in the format yyyy-mm-dd.\n");
+            printWrongDateFormatMessage();
         }
 
     }
@@ -231,23 +229,34 @@ public class UserInterface {
                         break;
                     case -1:
                         printCommands();
-                        acceptInput();
+                        acceptCommand();
                     default:
-                        inexistingCommandMessage();
+                        printInexistingCommandMessage();
                 }
 
             } catch (IllegalArgumentException e) {
-                inexistingCommandMessage();
+                printInexistingCommandMessage();
             }
         }
+    }
+
+    public void saveChanges() {
+        fileManager.createFile("savedTasks.txt");
+        fileManager.saveChanges(this.collection, "savedTasks.txt");
+        fileManager.createFile("logCompletedTasks.txt");
+        fileManager.saveChanges(this.logCompletedTasks, "logCompletedTasks.txt");
     }
 
     public void printErrorMessage() {
         System.out.println("Something went wrong. Try it again\n");
     }
 
-    public void inexistingCommandMessage() {
+    public void printInexistingCommandMessage() {
         System.out.println("Oops! The command you entered does not exist.\n");
+    }
+
+    public void printWrongDateFormatMessage() {
+        System.out.println("Error: please put the due date in the format yyyy-mm-dd.\n");
     }
 
     public void printByeMessage() {

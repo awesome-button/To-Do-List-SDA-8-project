@@ -25,8 +25,8 @@ public class TaskCollection implements Serializable {
             return this.tasks.get(index);
         }
 
-        public void addTask(Task task) {
-            this.tasks.add(task);
+        public boolean addTask(Task task) {
+            return this.tasks.add(task);
         }
 
         public boolean removeTask(Task task) {
