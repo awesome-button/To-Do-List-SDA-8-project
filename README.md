@@ -19,7 +19,7 @@ The program saves your tasks between sessions into the
 file named 'savedTasks.txt'(comes together with source files in the repository).
 
 The program also saves the log for completed tasks into the
-file named 'savedTasks.txt'(also included in the repository).
+file named 'logCompletedTasks.txt'(also included in the repository).
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
