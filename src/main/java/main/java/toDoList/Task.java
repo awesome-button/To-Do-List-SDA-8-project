@@ -26,6 +26,10 @@ public class Task implements Serializable {
         return this.project;
     }
 
+    public boolean isDone() {
+        return this.isDone;
+    }
+
     public void setTitle(String title) {
         this.title = title;
     }
