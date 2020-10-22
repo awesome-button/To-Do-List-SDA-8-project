@@ -1,15 +1,11 @@
 package test.java.toDoList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import main.java.toDoList.SorterByDate;
 import main.java.toDoList.Task;
-import main.java.toDoList.TaskCollection;
-
 import java.time.LocalDate;
-import java.util.Collections;
 
 public class SorterByDateTests {
 
