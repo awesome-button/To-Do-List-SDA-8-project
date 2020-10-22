@@ -1,12 +1,17 @@
 package main.java.toDoList;
 import java.io.*;
 
+/**
+ * The class is responsible for opening tasks saved from the previous sessions and for saving tasks into a file
+ * at the end of each session.
+ */
 public class FileManager {
 
-    public void createFile(String name) {
-        File newFile = new File(name);
-    }
-
+    /**
+     * Saves tasks to a file.
+     * @param collection
+     * @param name
+     */
     public void saveChanges(TaskCollection collection, String name) {
         try {
             FileOutputStream file = new FileOutputStream(name);
@@ -24,6 +29,11 @@ public class FileManager {
         }
     }
 
+    /**
+     * Opens tasks from a file saved there from a previous session.
+     * @param name
+     * @return
+     */
     public TaskCollection openSavedTasks(String name) {
 
         TaskCollection collection = new TaskCollection();
@@ -37,14 +47,14 @@ public class FileManager {
             stream.close();
             file.close();
         }
-        catch(EOFException  e)
+        catch(EOFException e)
         {}
         catch(IOException e) {
             System.out.println(e);
         }
         catch (ClassNotFoundException e)
         {
-            System.out.println("problems inside the file " + e);
+            System.out.println(e);
         }
         return collection;
     }
