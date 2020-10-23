@@ -169,26 +169,82 @@ public class UserInterface {
      * Accepts data about task from user and creates a task based on that data
      */
     public void createTask() {
-        System.out.println("For which project do you want to create a task?"); // should not ask the question if there is only one project
-        String project = scanner.nextLine();
 
-        System.out.println("What is your task's title?");
-        String title = scanner.nextLine();
+        String project = getProjectName();
+        String title = getTaskName();
+        LocalDate dueDate = getDueDate();
 
-        System.out.println("By when shall it be done? (date in format yyyy-mm-dd)"); // should handle exceptions, wrong format or a date before today
+        Task task = new Task(title, dueDate, project);
 
-        try {
-            LocalDate dueDate = LocalDate.parse(scanner.nextLine());
-            Task task = new Task(title, dueDate, project);
-
-            if (this.collection.addTask(task)) {
+        if (this.collection.addTask(task)) {
             System.out.println("\nThe task \'" + title + "\' has been created for " +
                     "the project \'" + project + "\' with due date on " + dueDate.toString() + "\n");
-            }
-
-        } catch(DateTimeParseException e) {
-            printWrongDateFormatMessage();
         }
+    }
+
+    /**
+     * Gets user input for project name
+     * @return
+     */
+    public String getProjectName() {
+        String project = "";
+
+        while (stringEmpty(project)) {
+            System.out.println("Write project name:"); // should not ask the question if there is only one project
+            project = scanner.nextLine();
+
+            if (stringEmpty(project)) printEmptyFieldMessage();
+        }
+        return project;
+    }
+
+    /**
+     * Gets user input for task title
+     * @return
+     */
+    public String getTaskName() {
+        String title = "";
+
+        while(stringEmpty(title)) {
+            System.out.println("What is your task's title?");
+            title = scanner.nextLine();
+
+            if (stringEmpty(title)) printEmptyFieldMessage();
+        }
+        return title;
+    }
+
+    /**
+     * Gets user input for due date
+     * @return
+     */
+    public LocalDate getDueDate() {
+        LocalDate dueDate = null;
+
+        while (dueDate == null) {
+            System.out.println("By when shall it be done? (date in format yyyy-mm-dd)");
+
+            try {
+                LocalDate date = LocalDate.parse(scanner.nextLine());
+                LocalDate today = LocalDate.now();
+
+                //checks if the due date is set for not earlier than today
+                if (date.compareTo(today) == -1) {
+                    System.out.println("The due date cannot be set before " + today);
+                } else {
+                    dueDate = date;
+                }
+
+            } catch(DateTimeParseException e) {
+                printWrongDateFormatMessage();
+            }
+        }
+        return dueDate;
+    }
+
+    /**Checks if a string is empty*/
+    private boolean stringEmpty(String name) {
+        return name.equals("");
     }
 
     /**
@@ -255,22 +311,19 @@ public class UserInterface {
 
                 switch (action) {
                     case 1:
-                        System.out.println("Write a new name for your task: ");
-                        String newTitle = scanner.nextLine();
+                        String newTitle = getTaskName();
                         selectedTask.setTitle(newTitle);
                         System.out.println("The name for your task has been updated to \'" + newTitle + "\'");
                         validCommand = true;
                         break;
                     case 2:
-                        System.out.println("Write a new due date for your task in the format yyyy-mm-dd: ");
-                        LocalDate newDate = LocalDate.parse(scanner.nextLine());
+                        LocalDate newDate = getDueDate();
                         selectedTask.setDueDate(newDate);
                         validCommand = true;
                         System.out.println("The due date for your task has been updated to \'" + newDate.toString() + "\'");
                         break;
                     case 3:
-                        System.out.println("Write a new name for the project your task belongs to: ");
-                        String newProject = scanner.nextLine();
+                        String newProject = getProjectName();
                         selectedTask.setProject(newProject);
                         System.out.println("The name for your task's project has been updated to \'" + newProject + "\'");
                         validCommand = true;
@@ -312,6 +365,11 @@ public class UserInterface {
     public void saveChanges() {
         fileManager.saveChanges(this.collection, "savedTasks.txt");
         fileManager.saveChanges(this.logCompletedTasks, "logCompletedTasks.txt");
+    }
+
+    /**Prints a message saying the field cannot be empty*/
+    public void printEmptyFieldMessage() {
+        System.out.println("The field cannot be empty");
     }
 
     /**Prints error message*/
