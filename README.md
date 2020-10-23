@@ -14,7 +14,7 @@ Once compiled and launched the program is straightforward to use.
 The text UI will guide you through different steps.
 Detailed User Manual can be found below.
 
-#####Important: 
+##### Important: 
 
 The program saves your tasks between sessions into the
 file named 'savedTasks.txt'(comes together with source files in the repository).
@@ -22,7 +22,7 @@ file named 'savedTasks.txt'(comes together with source files in the repository).
 The program also saves the log for completed tasks into the
 file named 'logCompletedTasks.txt'(also included in the repository).
 
-##Functionalities and User Manual
+## Functionalities and User Manual
 
 The main menu of the program includes the following commands:
 - (1) Show task list(by project or date)
